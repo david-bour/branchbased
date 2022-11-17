@@ -22,4 +22,6 @@ jobs:
         with:
           context: ./fasterapi/Dockerfile
           push: true
-          tags: davidbour/fasterapi:${{ github.sha }}
+          tags: |
+            davidbour/fasterapi:${{ github.sha }}
+            davidbour/fasterapi:latest
