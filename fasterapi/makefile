@@ -1,3 +1,7 @@
 build:
-	SHA=$$(git rev-parse HEAD)
-	echo "${SHA}"
+	SHA=$$(git rev-parse HEAD) && \
+	docker build -t davidbour/fasterapi:$${SHA} .
+
+push:
+	SHA=$$(git rev-parse HEAD) && \
+	docker push davidbour/fasterapi:$${SHA}
