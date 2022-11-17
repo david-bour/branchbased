@@ -21,7 +21,7 @@ jobs:
       - name: Build and Push
         uses: docker/build-push-action@v3
         with:
-          context: ./fasterapi
+          context: "{{defaultContext}}:fasterapi"
           push: true
           tags: |
             davidbour/fasterapi:${{ github.sha }}
