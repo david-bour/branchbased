@@ -1,6 +1,7 @@
-name: Build and Push
+name: Docker Build and Push
 
 on: [push]
+
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -16,9 +17,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
+  
       - name: Build and Push
         uses: docker/build-push-action@v3
         with:
+          context: ./fasterapi/Dockerfile
           push: true
-          tags: davidbour/app:${{ github.sha }}
+          tags: |
+            davidbour/fasterapi:${{ github.sha }}
+            davidbour/fasterapi:latest
