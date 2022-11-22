@@ -27,5 +27,5 @@ jobs:
           context: "{{defaultContext}}:fasterapi"
           push: true
           tags: |
-            davidbour/fasterapi:${{ github.sha }}
-            davidbour/fasterapi:latest
+            gcr.io/devops-283720/fasterapi:${{ github.sha }}
+            gcr.io/devops-283720/fasterapi:latest
