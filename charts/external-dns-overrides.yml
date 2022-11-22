@@ -1,0 +1,8 @@
+provider: google
+replicas: 1
+serviceAccount:
+  name: external-dns
+  annotations:
+    iam.gke.io/gcp-service-account: localdev@devops-283720.iam.gserviceaccount.com
+txtOwnerId: devops-283720
+policy: sync

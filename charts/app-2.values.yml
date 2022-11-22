@@ -5,12 +5,12 @@
 replicaCount: 1
 
 image:
-  repository: gcr.io/devops-283720/fasterapi
+  repository: davidbour/fasterapi
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
-imagePullSecrets: [{"name": "gcr-json-key"}]
+imagePullSecrets: [{"name": "regcred"}]
 nameOverride: ""
 fullnameOverride: ""
 
@@ -47,7 +47,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: echo.toproduction.io
+    - host: echo2.toproduction.io
       paths:
         - path: /
           pathType: ImplementationSpecific
