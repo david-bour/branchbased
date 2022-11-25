@@ -14,8 +14,9 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA }}
 
-      - uses: RafikFarhad/push-to-gcr-github-action@v4.1
+      - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
         with:
+          gcloud_service_key: ${{ secrets.GCP_SA }}
           registry: gcr.io
           project_id: devops-283720
           image_name: gcr.io/devops-283720/fasterapi
