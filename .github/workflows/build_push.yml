@@ -13,7 +13,7 @@ jobs:
           gcloud_service_key: ${{ secrets.GCP_SA }}
           registry: gcr.io
           project_id: devops-283720
-          image_name: gcr.io/devops-283720/fasterapi
+          image_name: fasterapi
           image_tag: ${{ github.sha }},latest
           dockerfile: ./fasterapi/Dockerfile
           context: ./fasterapi
