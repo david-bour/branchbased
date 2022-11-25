@@ -8,12 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - id: auth
-        name: Auth to GCP
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_SA }}
-
       - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
         with:
           gcloud_service_key: ${{ secrets.GCP_SA }}
