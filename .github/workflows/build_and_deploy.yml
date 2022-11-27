@@ -37,6 +37,7 @@ jobs:
       - uses: google-github-actions/get-gke-credentials@v1.0.0
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
+          project_id: ${{ env.GKE_PROJECT }}
           credentials: ${{ secrets.GCP_SA }}
 
       - uses: azure/setup-helm@v3
