@@ -1,0 +1,57 @@
+name: Docker Build, Push, Deploy
+
+on: [push]
+
+env:
+  GKE_PROJECT: devops-283720
+  GKE_CLUSTER: autopilot-cluster-1
+  GKE_NAMESPACE: test
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
+        with:
+          gcloud_service_key: ${{ secrets.GCP_SA }}
+          registry: gcr.io
+          project_id: devops-283720
+          image_name: fasterapi
+          image_tag: ${{ github.sha }},latest
+          dockerfile: ./fasterapi/Dockerfile
+          context: ./fasterapi
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: google-github-actions/setup-gcloud@v1
+        with:
+          service_account_key: ${{ secrets.GCP_SA }}
+          project_id: ${{ secrets.GKE_PROJECT }}
+
+      - uses: google-github-actions/get-gke-credentials@v1.0.0
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          credentials: ${{ secrets.GCP_SA }}
+
+      - uses: azure/setup-helm@v3
+        with:
+          version: 'latest'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Helm Package
+        run: |
+          helm package --app-version ${{ github.sha }} ./fasterapi
+        working-directory: charts
+
+      - name: Deploy Helm Chart
+        run: |
+          CHART_VERSION=$(grep -r "version:" fasterapi/Chart.yaml | sed 's/^.*: //')
+          echo ${{ CHART_VERSION }}
+          helm upgrade --install --create-namespace ${{ env.GKE_NAMESPACE }} fasterapi fasterpi-${{ CHART_VERSION }}
+        working-directory: charts

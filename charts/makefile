@@ -14,7 +14,6 @@ xsa-uninstall:
 
 # Creates the serviceAccount GCP to serviceAccount K8s binding
 # and proper annotation. Helm will already have the kubectl
-# 
 xsa-workload:
 	gcloud iam service-accounts add-iam-policy-binding localdev@devops-283720.iam.gserviceaccount.com \
 		--role roles/iam.workloadIdentityUser \
