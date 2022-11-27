@@ -52,6 +52,6 @@ jobs:
       - name: Deploy Helm Chart
         run: |
           CHART_VERSION=$(grep -r "version:" fasterapi/Chart.yaml | sed 's/^.*: //')
-          echo ${{ CHART_VERSION }}
-          helm upgrade --install --create-namespace ${{ env.GKE_NAMESPACE }} fasterapi fasterpi-${{ CHART_VERSION }}
+          echo $CHART_VERSION
+          helm upgrade --install --create-namespace ${{ env.GKE_NAMESPACE }} fasterapi fasterpi-$CHART_VERSION
         working-directory: charts
