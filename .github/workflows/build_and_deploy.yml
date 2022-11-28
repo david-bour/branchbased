@@ -40,7 +40,6 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER }}
           project_id: ${{ env.GKE_PROJECT }}
           location: ${{ env.GKE_LOCATION }}
-          credentials: ${{ secrets.GCP_SA }}
 
       - uses: azure/setup-helm@v3
         with:
