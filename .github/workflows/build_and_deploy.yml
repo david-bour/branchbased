@@ -63,5 +63,5 @@ jobs:
       - name: Deploy Helm Chart
         run: |
           echo ${{ env.chart_version }}
-          helm upgrade --install --create-namespace ${{ env.GKE_NAMESPACE }} fasterapi fasterpi-${{ env.chart_version }}
+          helm upgrade --install -n ${{ env.GKE_NAMESPACE }} --create-namespace fasterapi fasterpi-${{ env.chart_version }}.tgz
         working-directory: charts
