@@ -50,14 +50,14 @@ jobs:
           version: 'latest'
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Helm Package
-        run: |
-          helm package --app-version ${{ github.sha }} --version prefix-${{ github.sha }} ./fasterapi
-        working-directory: charts
-
       - name: Get Helm Chart Version
         run: |
           echo "chart_version=$(grep -r "version:" fasterapi/Chart.yaml | sed 's/^.*: //')" >> $GITHUB_ENV
+        working-directory: charts
+
+      - name: Helm Package
+        run: |
+          helm package --app-version ${{ github.sha }} --version ${{ env.chart_version }}-${{ github.run_number }} ./fasterapi
         working-directory: charts
 
       - name: Deploy Helm Chart
