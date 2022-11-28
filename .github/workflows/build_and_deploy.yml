@@ -58,6 +58,7 @@ jobs:
       - name: Get Helm Chart Version
         run: |
           echo "chart_version=$(grep -r "version:" fasterapi/Chart.yaml | sed 's/^.*: //')" >> $GITHUB_ENV
+        working-directory: charts
 
       - name: Deploy Helm Chart
         run: |
