@@ -52,7 +52,7 @@ jobs:
 
       - name: Helm Package
         run: |
-          helm package --app-version ${{ github.sha }} --version ${{ github.sha }} ./fasterapi
+          helm package --app-version ${{ github.sha }} --version prefix-${{ github.sha }} ./fasterapi
         working-directory: charts
 
       - name: Get Helm Chart Version
