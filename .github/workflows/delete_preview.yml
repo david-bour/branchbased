@@ -36,6 +36,10 @@ jobs:
           version: 'latest'
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
       - name: Get Helm Chart Version
         run: |
           echo "chart_version=$(grep -r "version:" fasterapi/Chart.yaml | sed 's/^.*: //')" >> $GITHUB_ENV
@@ -46,3 +50,6 @@ jobs:
           echo ${{ env.chart_version }}
           helm uninstall -n ${{ env.GKE_NAMESPACE }} fasterapi
         working-directory: charts
+
+      - name: Delete Namespace
+        run: kubectl delete ns ${{ GKE_NAMESPACE }}
