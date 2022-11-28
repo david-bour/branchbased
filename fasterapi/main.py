@@ -7,4 +7,4 @@ config = os.environ.get("PAGE_NAME", "DEFAULT")
 
 @app.get("/")
 def home():
-    return {"Configuration": config}
+    return {"secretCode": config}
