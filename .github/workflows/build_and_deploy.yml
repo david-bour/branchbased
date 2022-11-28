@@ -5,6 +5,7 @@ on: [push]
 env:
   GKE_PROJECT: devops-283720
   GKE_CLUSTER: autopilot-cluster-1
+  GKE_LOCATION: us-west1
   GKE_NAMESPACE: test
 
 jobs:
@@ -38,6 +39,7 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           project_id: ${{ env.GKE_PROJECT }}
+          location: ${{ env.GKE_LOCATION }}
           credentials: ${{ secrets.GCP_SA }}
 
       - uses: azure/setup-helm@v3
