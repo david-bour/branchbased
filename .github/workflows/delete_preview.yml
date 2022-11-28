@@ -52,4 +52,4 @@ jobs:
         working-directory: charts
 
       - name: Delete Namespace
-        run: kubectl delete ns ${{ GKE_NAMESPACE }}
+        run: kubectl delete ns ${{ env.GKE_NAMESPACE }}
