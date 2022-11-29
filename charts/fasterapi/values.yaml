@@ -50,7 +50,10 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
-  tls: []
+  tls:
+    - secretName: toproduction-tls
+      hosts:
+        - echo.toproduction.io
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
