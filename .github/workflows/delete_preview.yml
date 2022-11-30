@@ -1,0 +1,55 @@
+name: Delete Preview Environment
+
+on:
+  pull_request:
+    types: [ closed ]
+
+env:
+  GKE_PROJECT: devops-283720
+  GKE_CLUSTER: autopilot-cluster-1
+  GKE_LOCATION: us-west1
+  GKE_NAMESPACE: test
+
+jobs:
+  delete-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+    
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA }}
+
+      - uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GKE_PROJECT }}
+
+      - uses: google-github-actions/get-gke-credentials@v1.0.0
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          project_id: ${{ env.GKE_PROJECT }}
+          location: ${{ env.GKE_LOCATION }}
+
+      - uses: azure/setup-helm@v3
+        with:
+          version: 'latest'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Get Helm Chart Version
+        run: |
+          echo "chart_version=$(grep -r "version:" fasterapi/Chart.yaml | sed 's/^.*: //')" >> $GITHUB_ENV
+        working-directory: charts
+
+      - name: Delete Helm Chart
+        run: |
+          echo ${{ env.chart_version }}
+          helm uninstall -n ${{ env.GKE_NAMESPACE }} fasterapi
+        working-directory: charts
+
+      - name: Delete Namespace
+        run: kubectl delete ns ${{ env.GKE_NAMESPACE }}

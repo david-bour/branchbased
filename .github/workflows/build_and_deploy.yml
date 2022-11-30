@@ -1,0 +1,77 @@
+name: Docker Build, Push, Deploy
+
+on: [push]
+
+env:
+  GKE_PROJECT: devops-283720
+  GKE_CLUSTER: autopilot-cluster-1
+  GKE_LOCATION: us-west1
+  GKE_NAMESPACE: test
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
+        with:
+          gcloud_service_key: ${{ secrets.GCP_SA }}
+          registry: gcr.io
+          project_id: devops-283720
+          image_name: fasterapi
+          image_tag: ${{ github.sha }},latest
+          dockerfile: ./fasterapi/Dockerfile
+          context: ./fasterapi
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA }}
+
+      - uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GKE_PROJECT }}
+
+      - uses: google-github-actions/get-gke-credentials@v1.0.0
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          project_id: ${{ env.GKE_PROJECT }}
+          location: ${{ env.GKE_LOCATION }}
+
+      - uses: azure/setup-helm@v3
+        with:
+          version: 'latest'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Helm Chart Version
+        run: |
+          echo "chart_version=$(grep -r "version:" fasterapi/Chart.yaml | sed 's/^.*: //')" >> $GITHUB_ENV
+        working-directory: charts
+
+      - name: Helm Package
+        run: |
+          helm package --app-version ${{ github.sha }} --version ${{ env.chart_version }}-${{ github.run_number }} ./fasterapi
+        working-directory: charts
+
+      - name: Branch Name to URL
+        uses: rlespinasse/github-slug-action@v4.4.0
+
+      - name: Deploy Helm Chart
+        run: |
+          echo ${{ env.chart_version }}
+          helm upgrade --install \
+                       -n ${{ env.GITHUB_REF_SLUG_URL }} \
+                       --set ingress.hosts[0].host=${{ env.GITHUB_REF_SLUG_URL }}.toproduction.io \
+                       --set ingress.hosts[0].paths[0].path=/ \
+                       --set ingress.hosts[0].paths[0].pathType=ImplementationSpecific \
+                       --set ingress.tls[0].secretName=${{ env.GITHUB_REF_SLUG_URL }}-tls \
+                       --set ingress.tls[0].hosts[0]=${{ env.GITHUB_REF_SLUG_URL }}.toproduction.io \
+                       --create-namespace fasterapi fasterapi-${{ env.chart_version }}-${{ github.run_number }}.tgz
+        working-directory: charts
