@@ -62,7 +62,7 @@ jobs:
           helm package --app-version ${{ github.sha }} --version ${{ env.chart_version }}-${{ github.run_number }} ./fasterapi
         working-directory: charts
 
-      - name: Branch Name to URL
+      - name: Slugify
         uses: rlespinasse/github-slug-action@v4.4.0
 
       - name: Deploy Helm Chart

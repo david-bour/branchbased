@@ -8,7 +8,6 @@ env:
   GKE_PROJECT: devops-283720
   GKE_CLUSTER: autopilot-cluster-1
   GKE_LOCATION: us-west1
-  GKE_NAMESPACE: test
 
 jobs:
   delete-preview:
@@ -40,16 +39,12 @@ jobs:
         with:
           version: 'latest'
 
-      - name: Get Helm Chart Version
-        run: |
-          echo "chart_version=$(grep -r "version:" fasterapi/Chart.yaml | sed 's/^.*: //')" >> $GITHUB_ENV
-        working-directory: charts
+      - name: Slugify
+        uses: rlespinasse/github-slug-action@v4.4.0
 
       - name: Delete Helm Chart
-        run: |
-          echo ${{ env.chart_version }}
-          helm uninstall -n ${{ env.GKE_NAMESPACE }} fasterapi
+        run: helm uninstall -n ${{ env.GITHUB_REF_SLUG_URL }} fasterapi
         working-directory: charts
 
       - name: Delete Namespace
-        run: kubectl delete ns ${{ env.GKE_NAMESPACE }}
+        run: kubectl delete ns ${{ env.GITHUB_REF_SLUG_URL }}
