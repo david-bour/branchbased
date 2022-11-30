@@ -1,12 +1,14 @@
 name: Docker Build, Push, Deploy
 
-on: [push]
+on:
+  push:
+    branches:
+      - 'feature/**'
 
 env:
   GKE_PROJECT: devops-283720
   GKE_CLUSTER: autopilot-cluster-1
   GKE_LOCATION: us-west1
-  GKE_NAMESPACE: test
 
 jobs:
   docker:
