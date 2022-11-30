@@ -43,7 +43,9 @@ service:
 ingress:
   enabled: true
   className: "nginx"
-  annotations: {}
+  annotations: {
+    "cert-manager.io/issuer": "letsencrypt-staging"
+  }
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: echo.toproduction.io
