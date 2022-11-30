@@ -68,6 +68,7 @@ jobs:
           echo ${{ env.chart_version }}
           helm upgrade --install \
                        -n ${{ env.GITHUB_REF_SLUG_URL }} \
+                       --set ingress.hosts[0].host=${{ env.GITHUB_REF_SLUG_URL }}.toproduction.io \
                        --set ingress.tls[0].secretName=${{ env.GITHUB_REF_SLUG_URL }}-tls \
                        --set ingress.tls[0].hosts[0]=${{ env.GITHUB_REF_SLUG_URL }}.toproduction.io \
                        --create-namespace fasterapi fasterapi-${{ env.chart_version }}-${{ github.run_number }}.tgz
