@@ -4,8 +4,6 @@ on:
   pull_request:
     types:
       - closed
-    branches:
-      - 'feature/**'
 
 env:
   GKE_PROJECT: devops-283720
@@ -14,6 +12,7 @@ env:
 
 jobs:
   delete-preview:
+    if: startsWith(github.head_ref, 'feature/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
