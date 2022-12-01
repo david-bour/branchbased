@@ -12,3 +12,7 @@ def home():
 @app.get("/info")
 def info():
     return {"info": "NO buttons!"}
+
+@app.get("/new")
+def new():
+    return {"new info": "new"}

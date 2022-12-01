@@ -45,8 +45,8 @@ jobs:
         uses: rlespinasse/github-slug-action@v4.4.0
 
       - name: Delete Helm Chart
-        run: helm uninstall -n ${{ env.GITHUB_REF_SLUG_URL }} fasterapi
+        run: helm uninstall -n ${{ env.GITHUB_HEAD_REF_SLUG_URL }} fasterapi
         working-directory: charts
 
       - name: Delete Namespace
-        run: kubectl delete ns ${{ env.GITHUB_REF_SLUG_URL }}
+        run: kubectl delete ns ${{ env.GITHUB_HEAD_REF_SLUG_URL }}
