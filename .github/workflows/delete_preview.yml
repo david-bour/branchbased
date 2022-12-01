@@ -2,6 +2,8 @@ name: Delete Preview Environment
 
 on:
   pull_request:
+    branches:
+      - 'feature/**'
     types: [ closed ]
 
 env:
