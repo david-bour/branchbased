@@ -1,10 +1,11 @@
 name: Delete Preview Environment
 
 on:
-  pull_request_target:
+  pull_request:
+    types:
+      - closed
     branches:
       - 'feature/**'
-    types: [ closed ]
 
 env:
   GKE_PROJECT: devops-283720
