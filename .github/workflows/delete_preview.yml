@@ -2,9 +2,8 @@ name: Delete Preview Environment
 
 on:
   pull_request:
-    branches:
-      - 'feature/**'
-    types: [ closed ]
+    types:
+      - closed
 
 env:
   GKE_PROJECT: devops-283720
@@ -13,6 +12,7 @@ env:
 
 jobs:
   delete-preview:
+    if: startsWith(github.head_ref, 'feature/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
