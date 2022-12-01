@@ -11,4 +11,4 @@ def home():
 
 @app.get("/info")
 def info():
-    return {"info": "some configuration"}
+    return {"info": "buttons"}
