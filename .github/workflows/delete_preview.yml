@@ -4,8 +4,6 @@ on:
   pull_request:
     types:
       - closed
-    branches:
-      - 'feature/**'
 
 env:
   GKE_PROJECT: devops-283720
