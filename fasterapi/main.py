@@ -16,3 +16,7 @@ def info():
 @app.get("/new")
 def new():
     return {"new info": "new"}
+
+@app.get("/friday")
+def friday():
+    return {"friday": "🍺"}
